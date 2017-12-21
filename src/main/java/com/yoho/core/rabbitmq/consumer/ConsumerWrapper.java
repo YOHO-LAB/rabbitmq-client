@@ -86,13 +86,19 @@ public class ConsumerWrapper implements ChannelAwareMessageListener {
         }
 
         //do start
-        if (consumerInfo.isRetry()) {
-            startRetry();
-        } else if (consumerInfo.isDelay()) {
-            startDelay();
-        } else {
-            start();
+        try {
+            if (consumerInfo.isRetry()) {
+                startRetry();
+            } else if (consumerInfo.isDelay()) {
+                startDelay();
+            } else {
+                start();
+            }
+        } catch (Exception e) {
+            logger.error("failed to init consumer container {} , connection factory {}, error{}", consumerInfo, connectionFactory, e);
+            throw new BeanCreationException("failed to init consumer container");
         }
+
     }
 
     /***
