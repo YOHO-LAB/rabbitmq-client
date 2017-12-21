@@ -1,0 +1,59 @@
+consumer:
+     -  address: 192.168.103.78:5672
+        username: guest #default guest
+        password: guest #default guest
+        vhost: /        #default /
+        consumers:
+              - class: com.yoho.core.rabbitmq.TestConsumer   #custom class which implements IConsumer interface
+                topic: common_test
+                ratelimit: 2
+###
+#              - class: com.yoho.core.rabbitmq.TestConsumer2
+#                topic: retry_test
+#                concurrent: 2
+#                prefetch: 10
+#                retry:
+#                    interval: 1
+####
+              - class: com.yoho.core.rabbitmq.TestConsumer
+                topic: delay_test
+                ratelimit: 2
+                delay:
+                    interval: 1
+#
+#              - class: com.yoho.core.rabbitmq.TestConsumer
+#                topic: fed_test_topic
+#                federation:
+#                    exchange: yh.federation.topic #default federation exchange
+
+
+#     -  address: 127.0.0.1:5672,127.0.0.1:5673  support rabbitmq cluster
+#        consumers:
+##              - class: com.yoho.core.rabbitmq.TestConsumer
+##                topic: fed_test_topic
+##                federation:
+
+
+producer:
+    - address: 192.168.103.78:5672
+      username: guest
+      password: guest
+      vhost: /
+      producers:
+          - bean: producer1  #only once named in classpath
+
+          - bean: producer2
+            async: true
+            trace: false
+            confirm: true
+            persistent: true
+#
+#    - address: 192.168.103.77:5672,192.168.103.78:5672
+#      producers:
+#          - bean: producer3  #only once named in classpath
+#
+#          - bean: producer4
+#            async: true
+#            trace: true
+#            confirm: false
+#            persistent: true
